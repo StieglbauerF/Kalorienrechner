@@ -725,6 +725,11 @@
         recalculateTDEE(false);
       }
 
+      // --- NEU: Repariert fehlende Kategorien aus alten Speicherständen ---
+      if (!state.meals) state.meals = {};
+      MEAL_CATEGORIES.forEach(c => { if (!state.meals[c.key]) state.meals[c.key] = []; });
+      // --------------------------------------------------------------------
+
       firebaseDbUrl = localStorage.getItem('makroTrack_firebaseDbUrl') || '';
       syncRoomId = localStorage.getItem('makroTrack_syncRoom') || 'fabian-makro-2026';
       document.getElementById('firebaseDbUrl').value = firebaseDbUrl;
