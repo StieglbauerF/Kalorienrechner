@@ -969,26 +969,15 @@
       const custom = state.customFoods || [];
       
       if (custom.length === 0) {
-        container.innerHTML = `<p class="text-[11px] text-slate-500 italic w-full">Noch keine eigenen Schnell-Vorlagen. Lege welche über "+ Hinzufügen" an.</p>`;
+        container.innerHTML = `<p class="text-[11px] text-slate-500 italic w-full">Du hast noch keine eigenen Lebensmittel. Speichere neue unter "+ Hinzufügen" -> "Manuell / Eigenes".</p>`;
         return;
       }
 
       container.innerHTML = custom.map(f => `
-        <div class="group relative flex items-center bg-slate-800 hover:bg-slate-750 border border-slate-700 rounded-xl overflow-hidden shadow-sm transition">
-          <button onclick="applyDynamicTemplate('${f.id}')" class="px-3 py-2 text-xs font-medium text-slate-200 flex items-center gap-2 hover:bg-slate-700/80 transition">
-            <span>${f.name}</span>
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-emerald-400 font-bold">+ ${f.defaultG || 100}g</span>
-          </button>
-          
-          <div class="flex items-center border-l border-slate-700 bg-slate-800/80">
-            <button onclick="quickEditTemplate(event, '${f.id}')" title="Bearbeiten" class="px-1.5 py-2 text-slate-400 hover:text-white hover:bg-slate-700 transition">
-              <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-            </button>
-            <button onclick="quickDeleteTemplate(event, '${f.id}')" title="Löschen" class="px-1.5 py-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/20 transition">
-              <i data-lucide="x" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-        </div>
+        <button onclick="applyDynamicTemplate('${f.id}')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-200 flex items-center gap-2 transition shadow-sm shadow-slate-900">
+          <span>${f.name}</span>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-emerald-400 font-bold">+ ${f.defaultG}g</span>
+        </button>
       `).join('');
     }
 
@@ -1360,13 +1349,13 @@
       });
     }
 
-function renderFoodDatabaseList() {
+    function renderFoodDatabaseList() {
       const q = (document.getElementById('foodSearchInput').value || '').toLowerCase().trim();
       const listEl = document.getElementById('foodDatabaseList');
       const foods = getAllFoods().filter(f => f.name.toLowerCase().includes(q));
 
       if (foods.length === 0) {
-        listEl.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">Keine Einträge gefunden.</p>`;
+        listEl.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">Keine Einträge gefunden. Speichere neue Lebensmittel unter dem Tab "Manuell / Eigenes".</p>`;
         return;
       }
 
@@ -1382,86 +1371,12 @@ function renderFoodDatabaseList() {
             <button onclick="addFoodFromDb('${f.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white transition">
               + ${f.defaultG || 100}g
             </button>
-            <button onclick="quickEditTemplate(event, '${f.id}')" class="p-1.5 rounded-lg text-slate-400 hover:bg-slate-900 hover:text-white transition" title="Bearbeiten">
-              <i data-lucide="edit-3" class="w-4 h-4"></i>
-            </button>
-            <button onclick="deleteFoodFromDb('${f.id}')" class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-900 hover:text-rose-400 transition" title="Löschen">
+            <button onclick="deleteFoodFromDb('${f.id}')" class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-900 hover:text-rose-400 transition" title="Dauerhaft löschen">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
           </div>
         </div>
       `).join('');
-      lucide.createIcons();
-    }
-
-    // Direkt aus der Schnell-Vorlage zum Bearbeiten öffnen
-    function quickEditTemplate(event, foodId) {
-      if (event) event.stopPropagation();
-      const food = getAllFoods().find(f => f.id === foodId);
-      if (!food) return;
-
-      openFoodModal(document.getElementById('quickTemplateMealSelect').value, 'custom');
-      
-      document.getElementById('customEditId').value = food.id;
-      document.getElementById('customFormHeading').textContent = `Lebensmittel bearbeiten: ${food.name}`;
-      document.getElementById('customSubmitBtn').textContent = 'Änderungen speichern';
-      document.getElementById('cancelEditBtn').classList.remove('hidden');
-
-      document.getElementById('customName').value = food.name;
-      document.getElementById('customKcal').value = food.kcal;
-      document.getElementById('customP').value = food.p;
-      document.getElementById('customC').value = food.c;
-      document.getElementById('customF').value = food.f;
-      document.getElementById('customS').value = food.s || 0;
-      document.getElementById('customGrams').value = food.defaultG || 100;
-      document.getElementById('customSaveToDb').checked = true;
-    }
-
-    function resetCustomFoodForm() {
-      document.getElementById('customEditId').value = '';
-      document.getElementById('customFormHeading').textContent = 'Neues Lebensmittel anlegen';
-      document.getElementById('customSubmitBtn').textContent = 'Speichern & Hinzufügen';
-      document.getElementById('cancelEditBtn').classList.add('hidden');
-      document.getElementById('customName').value = '';
-      document.getElementById('customKcal').value = '';
-      document.getElementById('customP').value = '';
-      document.getElementById('customC').value = '';
-      document.getElementById('customF').value = '';
-      document.getElementById('customS').value = '';
-      document.getElementById('customGrams').value = '100';
-    }
-
-    function saveCustomFoodAction() {
-      const editId = document.getElementById('customEditId').value;
-      const name = document.getElementById('customName').value.trim() || 'Eigenes Gericht';
-      const kcal = parseFloat(document.getElementById('customKcal').value) || 0;
-      const p = parseFloat(document.getElementById('customP').value) || 0;
-      const c = parseFloat(document.getElementById('customC').value) || 0;
-      const f = parseFloat(document.getElementById('customF').value) || 0;
-      const s = parseFloat(document.getElementById('customS').value) || 0;
-      const grams = parseFloat(document.getElementById('customGrams').value) || 100;
-
-      if (editId) {
-        const idx = state.customFoods.findIndex(f => f.id === editId);
-        if (idx >= 0) {
-          state.customFoods[idx] = {
-            ...state.customFoods[idx],
-            name, kcal, p, c, f, s, defaultG: grams
-          };
-        }
-      } else {
-        const newFood = {
-          id: 'custom_' + Date.now(),
-          name, kcal, p, c, f, s,
-          defaultG: grams
-        };
-        state.customFoods.push(newFood);
-        state.meals[activeModalMealKey].push({ ...newFood, grams });
-      }
-
-      saveState();
-      updateAllUI();
-      closeFoodModal();
     }
 
     function addFoodFromDb(foodId) {
