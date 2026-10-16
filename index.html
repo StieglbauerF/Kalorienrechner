@@ -707,6 +707,21 @@
       }
     }
 
+    function normalizeState() {
+      // Firebase macht aus Arrays teils Objekte und löscht leere Arrays
+      const toArray = (v) => Array.isArray(v) ? v : (v && typeof v === 'object' ? Object.values(v) : []);
+
+      if (!state.meals || typeof state.meals !== 'object') state.meals = {};
+      MEAL_CATEGORIES.forEach(c => { state.meals[c.key] = toArray(state.meals[c.key]); });
+
+      state.customFoods = toArray(state.customFoods);
+      state.history = toArray(state.history);
+
+      if (!state.targets) state.targets = { kcal: 2650, p: 156, c: 325, f: 82, s: 6 };
+      if (!state.calc) state.calc = { gender: 'male', weight: 78, height: 180, age: 23, activity: 1.55, objective: 0, proteinFactor: 2.0 };
+    }
+
+
     function initApp() {
       const saved = localStorage.getItem('makroTrackState_v4') || localStorage.getItem('makroTrackState_v3');
       if (saved) {
@@ -721,8 +736,7 @@
       }
 
       // --- Absturz-Schutz: Fehlende Mahlzeiten aus alten Speicherständen wiederherstellen ---
-      if (!state.meals) state.meals = {};
-      MEAL_CATEGORIES.forEach(c => { if (!state.meals[c.key]) state.meals[c.key] = []; });
+      normalizeState();
       // -------------------------------------------------------------------------------------
 
       firebaseDbUrl = localStorage.getItem('makroTrack_firebaseDbUrl') || '';
@@ -785,6 +799,7 @@
         const data = await res.json();
         if (data && data.state) {
           state = { ...state, ...data.state };
+          normalizeState();
           localStorage.setItem('makroTrackState_v4', JSON.stringify(state));
           syncCalculatorInputsFromState();
           updateAllUI();
@@ -821,6 +836,7 @@
             const localTs = state.lastModified || 0;
             if (remote.timestamp > localTs + 1000) {
               state = { ...state, ...remote.state };
+              normalizeState();
               localStorage.setItem('makroTrackState_v4', JSON.stringify(state));
               syncCalculatorInputsFromState();
               updateAllUI();
