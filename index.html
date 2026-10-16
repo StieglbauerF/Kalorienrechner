@@ -160,7 +160,7 @@
       </div>
 
       <div id="goalManualContainer" class="hidden space-y-4">
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
           <div>
             <label class="block text-xs text-emerald-400 font-medium mb-1">Kalorien (kcal)</label>
             <input type="number" id="manualKcal" oninput="saveManualGoals()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500" />
@@ -170,12 +170,16 @@
             <input type="number" id="manualProtein" oninput="saveManualGoals()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500" />
           </div>
           <div>
-            <label class="block text-xs text-amber-400 font-medium mb-1">Kohlenhydrate (g)</label>
+            <label class="block text-xs text-amber-400 font-medium mb-1">Carbs (g)</label>
             <input type="number" id="manualCarbs" oninput="saveManualGoals()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500" />
           </div>
           <div>
             <label class="block text-xs text-rose-400 font-medium mb-1">Fett (g)</label>
             <input type="number" id="manualFat" oninput="saveManualGoals()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-rose-500" />
+          </div>
+          <div>
+            <label class="block text-xs text-cyan-400 font-medium mb-1">Salz (g)</label>
+            <input type="number" step="0.1" id="manualSalt" oninput="saveManualGoals()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500" />
           </div>
         </div>
         <div class="flex justify-end">
@@ -188,7 +192,7 @@
 
     <!-- Dashboard Overview -->
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-      <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-5 flex items-center justify-between gap-4 shadow-lg">
+      <div class="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-5 flex items-center justify-between gap-4 shadow-lg">
         <div class="space-y-3">
           <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Tagesbilanz Heute</span>
           <div>
@@ -212,7 +216,7 @@
           </div>
         </div>
 
-        <div class="relative w-32 h-32 flex-shrink-0 flex items-center justify-center">
+        <div class="relative w-28 h-28 flex-shrink-0 flex items-center justify-center">
           <svg class="w-full h-full -rotate-90 transform" viewBox="0 0 120 120">
             <circle cx="60" cy="60" r="50" stroke="#1e293b" stroke-width="12" fill="transparent" />
             <circle id="kcalRingProgress" cx="60" cy="60" r="50" stroke="#10b981" stroke-width="12" stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke-linecap="round" fill="transparent" class="transition-all duration-500" />
@@ -224,8 +228,8 @@
         </div>
       </div>
 
-      <!-- Macro Progress Cards -->
-      <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <!-- Macro Progress Cards (P, C, F, S) -->
+      <div class="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between shadow-lg">
           <div class="flex items-center justify-between">
             <span class="text-xs font-semibold text-blue-400 uppercase tracking-wider">Protein</span>
@@ -245,7 +249,7 @@
 
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between shadow-lg">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Kohlenhydrate</span>
+            <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Carbs</span>
             <span class="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-xs font-bold">C</span>
           </div>
           <div class="my-3">
@@ -274,6 +278,24 @@
           </div>
           <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
             <div id="barF" class="bg-rose-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- NEW: Salt Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between shadow-lg">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-cyan-400 uppercase tracking-wider">Salz</span>
+            <span class="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 text-xs font-bold">S</span>
+          </div>
+          <div class="my-3">
+            <div class="flex items-baseline gap-1">
+              <span id="statEatenS" class="text-2xl font-bold text-white">0</span>
+              <span class="text-xs text-slate-400">/ <span id="statTargetS">6</span> g</span>
+            </div>
+            <p id="statDiffS" class="text-[11px] text-slate-400 mt-0.5">Noch 6 g offen</p>
+          </div>
+          <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+            <div id="barS" class="bg-cyan-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
           </div>
         </div>
       </div>
@@ -509,17 +531,14 @@
         <div class="space-y-1.5">
           <span class="text-[11px] text-slate-400 font-medium">Oder typisches Gericht direkt als Schätzung laden:</span>
           <div class="flex flex-wrap gap-1.5">
-            <button onclick="fillPhotoResult({name: 'Hühner-Kebab im Fladenbrot', portionGrams: 370, kcal100: 186, p100: 10.8, c100: 20.3, f100: 6.4, note: 'Geschätzt: ~130g Fladenbrot, 115g Hühnerfleisch, 45g Joghurtsauce, 80g Salat'})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200 border border-slate-700">
+            <button onclick="fillPhotoResult({name: 'Hühner-Kebab im Fladenbrot', portionGrams: 370, kcal100: 186, p100: 10.8, c100: 20.3, f100: 6.4, s100: 1.2, note: 'Geschätzt: ~130g Fladenbrot, 115g Hühnerfleisch, 45g Joghurtsauce, 80g Salat'})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200 border border-slate-700">
               🥙 Hühner-Kebab (~690 kcal)
             </button>
-            <button onclick="fillPhotoResult({name: 'Wiener Schnitzel mit Pommes', portionGrams: 420, kcal100: 235, p100: 13.5, c100: 21.0, f100: 10.8, note: 'Geschätzt: 220g Schnitzel paniert + 200g Pommes'})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200 border border-slate-700">
+            <button onclick="fillPhotoResult({name: 'Wiener Schnitzel mit Pommes', portionGrams: 420, kcal100: 235, p100: 13.5, c100: 21.0, f100: 10.8, s100: 1.0, note: 'Geschätzt: 220g Schnitzel paniert + 200g Pommes'})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200 border border-slate-700">
               🍋 Schnitzel & Pommes (~985 kcal)
             </button>
-            <button onclick="fillPhotoResult({name: 'Mensa Pasta Bolognese', portionGrams: 450, kcal100: 155, p100: 7.5, c100: 21.0, f100: 4.5, note: 'Geschätzt: 450g Tellerportion inkl. Faschiertem'})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200 border border-slate-700">
+            <button onclick="fillPhotoResult({name: 'Mensa Pasta Bolognese', portionGrams: 450, kcal100: 155, p100: 7.5, c100: 21.0, f100: 4.5, s100: 0.8, note: 'Geschätzt: 450g Tellerportion inkl. Faschiertem'})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200 border border-slate-700">
               🍝 Pasta Bolognese (~700 kcal)
-            </button>
-            <button onclick="fillPhotoResult({name: 'Käseleberkäse-Semmel', portionGrams: 190, kcal100: 295, p100: 12.5, c100: 22.0, f100: 17.5, note: 'Geschätzt: 1 Kaisersemmel + 120g Käseleberkäse'})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-200 border border-slate-700">
-              🥨 Käseleberkäse-Semmel (~560 kcal)
             </button>
           </div>
         </div>
@@ -544,28 +563,32 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-4 gap-2 pt-1">
+          <div class="grid grid-cols-5 gap-2 pt-1">
             <div>
-              <label class="block text-[10px] text-slate-400 mb-1">kcal / 100g</label>
+              <label class="block text-[10px] text-slate-400 mb-1">kcal/100g</label>
               <input type="number" step="0.1" id="photoKcal100" oninput="updatePhotoTotalPreview()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white" />
             </div>
             <div>
-              <label class="block text-[10px] text-blue-400 mb-1">Protein / 100g</label>
+              <label class="block text-[10px] text-blue-400 mb-1">P/100g</label>
               <input type="number" step="0.1" id="photoP100" oninput="updatePhotoTotalPreview()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white" />
             </div>
             <div>
-              <label class="block text-[10px] text-amber-400 mb-1">Carbs / 100g</label>
+              <label class="block text-[10px] text-amber-400 mb-1">C/100g</label>
               <input type="number" step="0.1" id="photoC100" oninput="updatePhotoTotalPreview()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white" />
             </div>
             <div>
-              <label class="block text-[10px] text-rose-400 mb-1">Fett / 100g</label>
+              <label class="block text-[10px] text-rose-400 mb-1">F/100g</label>
               <input type="number" step="0.1" id="photoF100" oninput="updatePhotoTotalPreview()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="block text-[10px] text-cyan-400 mb-1">Salz/100g</label>
+              <input type="number" step="0.1" id="photoS100" oninput="updatePhotoTotalPreview()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white" />
             </div>
           </div>
 
           <div class="bg-slate-900/90 rounded-xl p-2.5 flex items-center justify-between border border-slate-700/80">
             <span class="text-xs text-slate-400">Ergibt für diese Portion:</span>
-            <span id="photoTotalPreviewText" class="text-xs font-bold text-emerald-400">690 kcal · 40g P · 75g C · 23.5g F</span>
+            <span id="photoTotalPreviewText" class="text-xs font-bold text-emerald-400">690 kcal · 40g P · 75g C · 23.5g F · 4.4g Salz</span>
           </div>
 
           <button onclick="confirmAddPhotoFood()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white shadow-lg shadow-emerald-900/40 transition flex items-center justify-center gap-2">
@@ -580,22 +603,26 @@
           <label class="block text-xs text-slate-400 mb-1">Name des Lebensmittels / Gerichts</label>
           <input type="text" id="customName" placeholder="z. B. Hühner-Kebab oder Proteinriegel" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500" />
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
           <div>
-            <label class="block text-xs text-emerald-400 mb-1">kcal (pro 100g)</label>
+            <label class="block text-[11px] text-emerald-400 mb-1">kcal (/100g)</label>
             <input type="number" step="0.1" id="customKcal" placeholder="186" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500" />
           </div>
           <div>
-            <label class="block text-xs text-blue-400 mb-1">Protein (g/100g)</label>
+            <label class="block text-[11px] text-blue-400 mb-1">Protein (g)</label>
             <input type="number" step="0.1" id="customP" placeholder="10.8" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500" />
           </div>
           <div>
-            <label class="block text-xs text-amber-400 mb-1">Carbs (g/100g)</label>
+            <label class="block text-[11px] text-amber-400 mb-1">Carbs (g)</label>
             <input type="number" step="0.1" id="customC" placeholder="20.3" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500" />
           </div>
           <div>
-            <label class="block text-xs text-rose-400 mb-1">Fett (g/100g)</label>
+            <label class="block text-[11px] text-rose-400 mb-1">Fett (g)</label>
             <input type="number" step="0.1" id="customF" placeholder="6.4" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-rose-500" />
+          </div>
+          <div>
+            <label class="block text-[11px] text-cyan-400 mb-1">Salz (g)</label>
+            <input type="number" step="0.1" id="customS" placeholder="1.2" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500" />
           </div>
         </div>
         <div class="grid grid-cols-2 gap-3 pt-1">
@@ -632,7 +659,7 @@
     let state = {
       goalMode: 'auto',
       calc: { gender: 'male', weight: 78, height: 180, age: 23, activity: 1.55, objective: 0, proteinFactor: 2.0 },
-      targets: { kcal: 2650, p: 156, c: 325, f: 82 },
+      targets: { kcal: 2650, p: 156, c: 325, f: 82, s: 6 }, // 6g Salz ist der Standard/Zielwert
       meals: {
         breakfast: [],
         lunch: [],
@@ -640,7 +667,7 @@
         snacks: []
       },
       customFoods: [],
-      history: [] // Array of archived past days
+      history: []
     };
 
     let activeModalMealKey = 'lunch';
@@ -693,8 +720,10 @@
         recalculateTDEE(false);
       }
 
+      // --- Absturz-Schutz: Fehlende Mahlzeiten aus alten Speicherständen wiederherstellen ---
       if (!state.meals) state.meals = {};
       MEAL_CATEGORIES.forEach(c => { if (!state.meals[c.key]) state.meals[c.key] = []; });
+      // -------------------------------------------------------------------------------------
 
       firebaseDbUrl = localStorage.getItem('makroTrack_firebaseDbUrl') || '';
       syncRoomId = localStorage.getItem('makroTrack_syncRoom') || 'fabian-makro-2026';
@@ -720,7 +749,6 @@
       triggerCloudPush(false);
     }
 
-    // --- Echter Cloud Sync über Firebase Realtime Database REST API ---
     async function triggerCloudPush(showNotification = false) {
       const endpoint = getCleanEndpoint();
       if (!endpoint) {
@@ -767,7 +795,6 @@
             closeSyncModal();
           }
         } else {
-          // Noch keine Daten in der Cloud -> aktuellen Stand initial hochladen
           await triggerCloudPush(false);
           if (showNotification) {
             alert('Cloud-Raum neu initialisiert und aktueller Stand gespeichert!');
@@ -826,12 +853,10 @@
       }
     }
 
-    // --- History & Day Completion ---
     function completeDayAndArchive() {
       const totals = calculateTotals();
       const todayStr = new Date().toLocaleDateString('de-DE', { weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit' });
 
-      // Check if today already exists in history, update or push new
       if (!state.history) state.history = [];
       const existingIdx = state.history.findIndex(h => h.date === todayStr);
 
@@ -846,17 +871,19 @@
         targetC: state.targets.c,
         f: totals.f,
         targetF: state.targets.f,
+        s: totals.s,
+        targetS: state.targets.s || 6,
         mealsCount: Object.values(state.meals).reduce((acc, l) => acc + l.length, 0)
       };
 
       if (existingIdx >= 0) {
         state.history[existingIdx] = dayRecord;
       } else {
-        state.history.unshift(dayRecord); // newest first
+        state.history.unshift(dayRecord);
       }
 
       saveState();
-      alert(`Tag (${todayStr}) erfolgreich abgeschlossen und in der Historie gespeichert! (${totals.kcal} kcal)`);
+      alert(`Tag (${todayStr}) erfolgreich abgeschlossen und in der Historie gespeichert! (${totals.kcal} kcal, ${totals.s}g Salz)`);
     }
 
     function openHistoryModal() {
@@ -903,7 +930,8 @@
               <span class="text-emerald-400 font-semibold">${h.kcal} / ${h.targetKcal} kcal</span> · 
               <span class="text-blue-400">${h.p}g P</span> · 
               <span class="text-amber-400">${h.c}g C</span> · 
-              <span class="text-rose-400">${h.f}g F</span>
+              <span class="text-rose-400">${h.f}g F</span> · 
+              <span class="text-cyan-400">${(h.s || 0).toFixed(1)}g Salz</span>
             </div>
           </div>
           <button onclick="deleteHistoryItem(${idx})" class="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-900">
@@ -922,7 +950,6 @@
       }
     }
 
-    // --- Standard App Logic ---
     function getAllFoods() {
       return state.customFoods || [];
     }
@@ -977,6 +1004,7 @@
       document.getElementById('manualProtein').value = state.targets.p;
       document.getElementById('manualCarbs').value = state.targets.c;
       document.getElementById('manualFat').value = state.targets.f;
+      document.getElementById('manualSalt').value = state.targets.s || 6;
 
       setGoalMode(state.goalMode, false);
     }
@@ -1027,12 +1055,16 @@
       const remainingKcal = Math.max(0, tdee - (pGrams * 4 + fGrams * 9));
       const cGrams = Math.round(remainingKcal / 4);
 
-      state.targets = { kcal: tdee, p: pGrams, c: cGrams, f: fGrams };
+      // Salz-Ziel bleibt beim Auto-Modus auf dem vorherigen oder Standardwert (6g)
+      const sGrams = state.targets.s || 6;
+
+      state.targets = { kcal: tdee, p: pGrams, c: cGrams, f: fGrams, s: sGrams };
 
       document.getElementById('manualKcal').value = tdee;
       document.getElementById('manualProtein').value = pGrams;
       document.getElementById('manualCarbs').value = cGrams;
       document.getElementById('manualFat').value = fGrams;
+      document.getElementById('manualSalt').value = sGrams;
 
       if (shouldSave) saveState();
       updateDashboardStats();
@@ -1043,6 +1075,7 @@
       state.targets.p = Math.max(10, parseInt(document.getElementById('manualProtein').value) || 150);
       state.targets.c = Math.max(10, parseInt(document.getElementById('manualCarbs').value) || 250);
       state.targets.f = Math.max(10, parseInt(document.getElementById('manualFat').value) || 70);
+      state.targets.s = parseFloat(document.getElementById('manualSalt').value) || 6;
       saveState();
       updateDashboardStats();
     }
@@ -1064,7 +1097,7 @@
     }
 
     function calculateTotals() {
-      let totalKcal = 0, totalP = 0, totalC = 0, totalF = 0;
+      let totalKcal = 0, totalP = 0, totalC = 0, totalF = 0, totalS = 0;
       Object.values(state.meals).forEach(list => {
         list.forEach(item => {
           const factor = (parseFloat(item.grams) || 0) / 100;
@@ -1072,13 +1105,15 @@
           totalP += item.p * factor;
           totalC += item.c * factor;
           totalF += item.f * factor;
+          totalS += (item.s || 0) * factor;
         });
       });
       return {
         kcal: Math.round(totalKcal),
         p: Math.round(totalP * 10) / 10,
         c: Math.round(totalC * 10) / 10,
-        f: Math.round(totalF * 10) / 10
+        f: Math.round(totalF * 10) / 10,
+        s: Math.round(totalS * 10) / 10
       };
     }
 
@@ -1127,13 +1162,18 @@
       updateMacroCard('P', eaten.p, t.p);
       updateMacroCard('C', eaten.c, t.c);
       updateMacroCard('F', eaten.f, t.f);
+      updateMacroCard('S', eaten.s || 0, t.s || 6); // Salz-Update
     }
 
     function updateMacroCard(code, val, target) {
-      document.getElementById(`statEaten${code}`).textContent = Math.round(val);
+      // Wenn S (Salz), dann Nachkommastelle, sonst runden
+      const displayVal = code === 'S' ? val.toFixed(1) : Math.round(val);
+      document.getElementById(`statEaten${code}`).textContent = displayVal;
       document.getElementById(`statTarget${code}`).textContent = target;
-      const diff = Math.round(target - val);
+      
+      const diff = code === 'S' ? (target - val).toFixed(1) : Math.round(target - val);
       const diffEl = document.getElementById(`statDiff${code}`);
+      
       if (diff >= 0) {
         diffEl.textContent = `Noch ${diff} g offen`;
       } else {
@@ -1149,13 +1189,14 @@
 
       MEAL_CATEGORIES.forEach(cat => {
         const items = state.meals[cat.key] || [];
-        let mKcal = 0, mP = 0, mC = 0, mF = 0;
+        let mKcal = 0, mP = 0, mC = 0, mF = 0, mS = 0;
         items.forEach(it => {
           const factor = (parseFloat(it.grams) || 0) / 100;
           mKcal += it.kcal * factor;
           mP += it.p * factor;
           mC += it.c * factor;
           mF += it.f * factor;
+          mS += (it.s || 0) * factor;
         });
 
         const card = document.createElement('div');
@@ -1175,6 +1216,7 @@
             const iP = (item.p * factor).toFixed(1);
             const iC = (item.c * factor).toFixed(1);
             const iF = (item.f * factor).toFixed(1);
+            const iS = ((item.s || 0) * factor).toFixed(1);
 
             return `
               <div class="bg-slate-800/60 border border-slate-700/70 rounded-xl p-3 space-y-2">
@@ -1185,7 +1227,8 @@
                       <span class="text-emerald-400 font-semibold">${iKcal} kcal</span> · 
                       <span class="text-blue-400">${iP}g P</span> · 
                       <span class="text-amber-400">${iC}g C</span> · 
-                      <span class="text-rose-400">${iF}g F</span>
+                      <span class="text-rose-400">${iF}g F</span> · 
+                      <span class="text-cyan-400">${iS}g Salz</span>
                     </p>
                   </div>
                   <button onclick="removeFoodItem('${cat.key}', ${idx})" class="text-slate-500 hover:text-rose-400 p-1">
@@ -1196,7 +1239,7 @@
                 <div class="flex items-center justify-between gap-2 pt-1 border-t border-slate-700/50">
                   <div class="flex items-center gap-1">
                     ${[50, 100, 150, 250].map(g => `
-                      <button onclick="updateItemGrams('${cat.key}', ${idx}, ${g})" class="px-2 py-0.5 rounded text-[10px] font-medium ${Number(item.grams) === g ? 'bg-emerald-600 text-white' : 'bg-slate-700/70 text-slate-300 hover:bg-slate-700'} transition">
+                      <button onclick="updateItemGrams('${cat.key}', ${idx},${g})" class="px-2 py-0.5 rounded text-[10px] font-medium ${Number(item.grams) === g ? 'bg-emerald-600 text-white' : 'bg-slate-700/70 text-slate-300 hover:bg-slate-700'} transition">
                         ${g}g
                       </button>
                     `).join('')}
@@ -1223,7 +1266,7 @@
                 <div>
                   <h3 class="text-sm font-bold text-white">${cat.title}</h3>
                   <p class="text-[11px] text-slate-400">
-                    ${Math.round(mKcal)} kcal · ${Math.round(mP)}g P · ${Math.round(mC)}g C · ${Math.round(mF)}g F
+                    ${Math.round(mKcal)} kcal · ${Math.round(mP)}g P · ${Math.round(mC)}g C · ${Math.round(mF)}g F · ${mS.toFixed(1)}g Salz
                   </p>
                 </div>
               </div>
@@ -1321,7 +1364,7 @@
           <div class="flex-1">
             <div class="text-xs font-semibold text-white">${f.name}</div>
             <div class="text-[11px] text-slate-400">
-              Pro 100g: <span class="text-emerald-400 font-medium">${f.kcal} kcal</span> · ${f.p}g P · ${f.c}g C · ${f.f}g F
+              Pro 100g: <span class="text-emerald-400 font-medium">${f.kcal} kcal</span> · ${f.p}g P · ${f.c}g C · ${f.f}g F · <span class="text-cyan-400">${f.s || 0}g Salz</span>
             </div>
           </div>
           <div class="flex items-center gap-1.5 flex-shrink-0">
@@ -1354,6 +1397,7 @@
       const p = parseFloat(document.getElementById('customP').value) || 0;
       const c = parseFloat(document.getElementById('customC').value) || 0;
       const f = parseFloat(document.getElementById('customF').value) || 0;
+      const s = parseFloat(document.getElementById('customS').value) || 0; // Salz
       const grams = parseFloat(document.getElementById('customGrams').value) || 100;
       const saveDb = document.getElementById('customSaveToDb').checked;
 
@@ -1364,6 +1408,7 @@
         p,
         c,
         f,
+        s,
         defaultG: grams
       };
 
@@ -1448,7 +1493,7 @@
 
       if (apiKey && currentPhotoBase64) {
         try {
-          const promptText = `Du bist ein präziser Ernährungswissenschaftler. Analysiere dieses Essensfoto (oder die Nährwerttabelle). ${hint ? 'Zusatzhinweis des Nutzers: ' + hint : ''}. Schätze den Namen des Gerichts auf Deutsch, das gesamte Portionsgewicht in Gramm (portionGrams) sowie die Nährwerte pro 100g (kcal100, p100, c100, f100) und eine kurze Aufschlüsselung der geschätzten Komponenten (note). Antworte AUSSCHLIESSLICH im folgenden JSON-Format: {"name": "String", "portionGrams": 370, "kcal100": 186, "p100": 10.8, "c100": 20.3, "f100": 6.4, "note": "Kurze Erklärung"}`;
+          const promptText = `Du bist ein präziser Ernährungswissenschaftler. Analysiere dieses Essensfoto (oder die Nährwerttabelle). ${hint ? 'Zusatzhinweis des Nutzers: ' + hint : ''}. Schätze den Namen des Gerichts auf Deutsch, das gesamte Portionsgewicht in Gramm (portionGrams) sowie die Nährwerte pro 100g (kcal100, p100, c100, f100, s100 für Salz) und eine kurze Aufschlüsselung der geschätzten Komponenten (note). Antworte AUSSCHLIESSLICH im folgenden JSON-Format: {"name": "String", "portionGrams": 370, "kcal100": 186, "p100": 10.8, "c100": 20.3, "f100": 6.4, "s100": 1.2, "note": "Kurze Erklärung"}`;
 
           const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
@@ -1491,6 +1536,7 @@
             p100: 13.5,
             c100: 21.0,
             f100: 10.8,
+            s100: 1.0,
             note: 'KI-Schätzung: ~220g Schnitzel paniert + 200g Beilage'
           });
         } else if (lowerHint.includes('pasta') || lowerHint.includes('nudel')) {
@@ -1501,6 +1547,7 @@
             p100: 12.4,
             c100: 19.5,
             f100: 5.2,
+            s100: 0.8,
             note: 'KI-Schätzung: ~450g Tellerportion Pasta mit Hühnerbruststreifen'
           });
         } else if (lowerHint.includes('skyr') || lowerHint.includes('bowl') || lowerHint.includes('hafer')) {
@@ -1511,6 +1558,7 @@
             p100: 10.6,
             c100: 13.5,
             f100: 1.5,
+            s100: 0.1,
             note: 'KI-Schätzung: ~300g Skyr, 70g Haferflocken, 80g Beeren'
           });
         } else {
@@ -1521,6 +1569,7 @@
             p100: 10.8,
             c100: 20.3,
             f100: 6.4,
+            s100: 1.2,
             note: 'Geschätzt aus Bild: ~130g Fladenbrot, 115g Hühnerfleisch, 45g Joghurtsauce, 80g Salat/Tomate/Zwiebel (Gesamt ~690 kcal)'
           });
         }
@@ -1539,6 +1588,7 @@
       document.getElementById('photoP100').value = res.p100 || 10;
       document.getElementById('photoC100').value = res.c100 || 20;
       document.getElementById('photoF100').value = res.f100 || 6;
+      document.getElementById('photoS100').value = res.s100 || 0; // Salz
       document.getElementById('photoResultNote').textContent = res.note || '';
 
       updatePhotoTotalPreview();
@@ -1551,15 +1601,17 @@
       const p100 = parseFloat(document.getElementById('photoP100').value) || 0;
       const c100 = parseFloat(document.getElementById('photoC100').value) || 0;
       const f100 = parseFloat(document.getElementById('photoF100').value) || 0;
+      const s100 = parseFloat(document.getElementById('photoS100').value) || 0;
 
       const factor = grams / 100;
       const totalKcal = Math.round(kcal100 * factor);
       const totalP = (p100 * factor).toFixed(1);
       const totalC = (c100 * factor).toFixed(1);
       const totalF = (f100 * factor).toFixed(1);
+      const totalS = (s100 * factor).toFixed(1);
 
       document.getElementById('photoTotalPreviewText').textContent =
-        `${totalKcal} kcal · ${totalP}g P · ${totalC}g C · ${totalF}g F`;
+        `${totalKcal} kcal · ${totalP}g P · ${totalC}g C · ${totalF}g F · ${totalS}g Salz`;
     }
 
     function confirmAddPhotoFood() {
@@ -1569,6 +1621,7 @@
       const p = parseFloat(document.getElementById('photoP100').value) || 0;
       const c = parseFloat(document.getElementById('photoC100').value) || 0;
       const f = parseFloat(document.getElementById('photoF100').value) || 0;
+      const s = parseFloat(document.getElementById('photoS100').value) || 0;
 
       const newEntry = {
         id: 'photo_' + Date.now(),
@@ -1577,6 +1630,7 @@
         p,
         c,
         f,
+        s,
         grams
       };
 
