@@ -969,15 +969,26 @@
       const custom = state.customFoods || [];
       
       if (custom.length === 0) {
-        container.innerHTML = `<p class="text-[11px] text-slate-500 italic w-full">Du hast noch keine eigenen Lebensmittel. Speichere neue unter "+ Hinzufügen" -> "Manuell / Eigenes".</p>`;
+        container.innerHTML = `<p class="text-[11px] text-slate-500 italic w-full">Noch keine eigenen Schnell-Vorlagen. Lege welche über "+ Hinzufügen" an.</p>`;
         return;
       }
 
       container.innerHTML = custom.map(f => `
-        <button onclick="applyDynamicTemplate('${f.id}')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-200 flex items-center gap-2 transition shadow-sm shadow-slate-900">
-          <span>${f.name}</span>
-          <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-emerald-400 font-bold">+ ${f.defaultG}g</span>
-        </button>
+        <div class="group relative flex items-center bg-slate-800 hover:bg-slate-750 border border-slate-700 rounded-xl overflow-hidden shadow-sm transition">
+          <button onclick="applyDynamicTemplate('${f.id}')" class="px-3 py-2 text-xs font-medium text-slate-200 flex items-center gap-2 hover:bg-slate-700/80 transition">
+            <span>${f.name}</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-emerald-400 font-bold">+ ${f.defaultG || 100}g</span>
+          </button>
+          
+          <div class="flex items-center border-l border-slate-700 bg-slate-800/80">
+            <button onclick="quickEditTemplate(event, '${f.id}')" title="Bearbeiten" class="px-1.5 py-2 text-slate-400 hover:text-white hover:bg-slate-700 transition">
+              <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+            </button>
+            <button onclick="quickDeleteTemplate(event, '${f.id}')" title="Löschen" class="px-1.5 py-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/20 transition">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
       `).join('');
     }
 
