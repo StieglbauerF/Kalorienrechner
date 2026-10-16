@@ -637,11 +637,14 @@
             </label>
           </div>
         </div>
-        <div class="pt-2">
-          <button onclick="addCustomFoodToMeal()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 transition">
-            Zur Mahlzeit hinzufügen
-          </button>
-        </div>
+          <div class="pt-2 space-y-2">
+            <button id="customSubmitBtn" onclick="addCustomFoodToMeal()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 transition">
+              Zur Mahlzeit hinzufügen
+            </button>
+            <button id="customCancelEditBtn" onclick="cancelEditFood()" class="hidden w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 border border-slate-700 transition">
+              Abbrechen
+            </button>
+          </div>
       </div>
 
     </div>
@@ -983,17 +986,25 @@
     function renderQuickTemplates() {
       const container = document.getElementById('quickTemplatesContainer');
       const custom = state.customFoods || [];
-      
+
       if (custom.length === 0) {
         container.innerHTML = `<p class="text-[11px] text-slate-500 italic w-full">Du hast noch keine eigenen Lebensmittel. Speichere neue unter "+ Hinzufügen" -> "Manuell / Eigenes".</p>`;
         return;
       }
 
       container.innerHTML = custom.map(f => `
-        <button onclick="applyDynamicTemplate('${f.id}')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-200 flex items-center gap-2 transition shadow-sm shadow-slate-900">
-          <span>${f.name}</span>
-          <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-emerald-400 font-bold">+ ${f.defaultG}g</span>
-        </button>
+        <div class="flex items-center rounded-xl bg-slate-800 border border-slate-700 overflow-hidden">
+          <button onclick="applyDynamicTemplate('${f.id}')" class="px-3 py-2 hover:bg-slate-700 text-xs font-medium text-slate-200 flex items-center gap-2 transition">
+            <span>${f.name}</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-emerald-400 font-bold">+ ${f.defaultG}g</span>
+          </button>
+          <button onclick="openFoodModal(document.getElementById('quickTemplateMealSelect').value, 'custom'); startEditFood('${f.id}')" class="px-2 py-2 text-slate-500 hover:text-blue-400 hover:bg-slate-700 transition" title="Bearbeiten">
+            <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+          </button>
+          <button onclick="deleteFoodFromDb('${f.id}')" class="px-2 py-2 text-slate-500 hover:text-rose-400 hover:bg-slate-700 transition" title="Löschen">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
       `).join('');
     }
 
@@ -1343,6 +1354,7 @@
     }
 
     function closeFoodModal() {
+      if (editingFoodId) resetCustomForm();
       document.getElementById('foodModal').classList.add('hidden');
     }
 
@@ -1384,6 +1396,9 @@
             </div>
           </div>
           <div class="flex items-center gap-1.5 flex-shrink-0">
+            <button onclick="startEditFood('${f.id}')" class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-900 hover:text-blue-400 transition" title="Bearbeiten">
+                <i data-lucide="pencil" class="w-4 h-4"></i>
+            </button>
             <button onclick="addFoodFromDb('${f.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white transition">
               + ${f.defaultG || 100}g
             </button>
@@ -1407,7 +1422,60 @@
       closeFoodModal();
     }
 
+    let editingFoodId = null;
+
+    function startEditFood(id) {
+      const f = getAllFoods().find(x => x.id === id);
+      if (!f) return;
+      editingFoodId = id;
+      document.getElementById('customName').value = f.name;
+      document.getElementById('customKcal').value = f.kcal;
+      document.getElementById('customP').value = f.p;
+      document.getElementById('customC').value = f.c;
+      document.getElementById('customF').value = f.f;
+      document.getElementById('customS').value = f.s || 0;
+      document.getElementById('customGrams').value = f.defaultG || 100;
+      document.getElementById('customSaveToDb').closest('label').classList.add('hidden');
+      document.getElementById('customSubmitBtn').textContent = 'Änderungen speichern';
+      document.getElementById('customCancelEditBtn').classList.remove('hidden');
+      switchModalTab('custom');
+    }
+
+    function resetCustomForm() {
+      editingFoodId = null;
+      ['customName', 'customKcal', 'customP', 'customC', 'customF', 'customS'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('customGrams').value = 100;
+      document.getElementById('customSaveToDb').closest('label').classList.remove('hidden');
+      document.getElementById('customSubmitBtn').textContent = 'Zur Mahlzeit hinzufügen';
+      document.getElementById('customCancelEditBtn').classList.add('hidden');
+    }
+
+    function cancelEditFood() {
+      resetCustomForm();
+      switchModalTab('search');
+    }
+
+    function saveEditedFood() {
+      const food = getAllFoods().find(x => x.id === editingFoodId);
+      if (!food) { resetCustomForm(); return; }
+      food.name = document.getElementById('customName').value.trim() || 'Eigenes Gericht';
+      food.kcal = parseFloat(document.getElementById('customKcal').value) || 0;
+      food.p = parseFloat(document.getElementById('customP').value) || 0;
+      food.c = parseFloat(document.getElementById('customC').value) || 0;
+      food.f = parseFloat(document.getElementById('customF').value) || 0;
+      food.s = parseFloat(document.getElementById('customS').value) || 0;
+      food.defaultG = parseFloat(document.getElementById('customGrams').value) || 100;
+      saveState();
+      resetCustomForm();
+      updateAllUI();
+      renderFoodDatabaseList();
+      switchModalTab('search');
+    }
+
     function addCustomFoodToMeal() {
+      if (editingFoodId) { saveEditedFood(); return; }
       const name = document.getElementById('customName').value.trim() || 'Eigenes Gericht';
       const kcal = parseFloat(document.getElementById('customKcal').value) || 0;
       const p = parseFloat(document.getElementById('customP').value) || 0;
